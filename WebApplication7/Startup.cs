@@ -38,7 +38,7 @@ namespace WebApplication7
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
-                options.SignIn.RequireConfirmedAccount = true; 
+                options.SignIn.RequireConfirmedAccount = false; 
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();

@@ -53,11 +53,9 @@ namespace WebApplication7.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Guid id, FileView model)
         {
-            if (!ModelState.IsValid) return RedirectToAction(nameof(Details), nameof(FoldersController), new { id });
+            if (!ModelState.IsValid) return RedirectToAction(nameof(Details), "Folders", new { id });
 
-
-            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.FilePath.ContentDisposition)
-                .FileName.Trim('"'));
+            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.FilePath.ContentDisposition).FileName.Trim('"'));
             var fileExt = Path.GetExtension(fileName);
 
             var file = new Models.File
@@ -105,7 +103,7 @@ namespace WebApplication7.Controllers
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null) return NotFound();
-            var file = await _context.Files.Include(f => f.Folder).SingleOrDefaultAsync(m => m.Id == id);
+            var file = await _context.Files.Include(f => f.Folder).SingleOrDefaultAsync(e => e.Id == id);
             if (file == null) return NotFound();
             _context.Files.Remove(file);
             await _context.SaveChangesAsync();
