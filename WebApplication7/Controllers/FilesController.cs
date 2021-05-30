@@ -34,8 +34,7 @@ namespace WebApplication7.Controllers
         {
             if (id == null) return NotFound();
 
-            var file = _context.Files
-                .SingleOrDefault(m => m.Id == id);
+            var file = _context.Files.SingleOrDefault(m => m.Id == id);
             if (file == null) return NotFound();
 
             ViewBag.Folder = file.FolderId;
@@ -70,6 +69,8 @@ namespace WebApplication7.Controllers
             };
             file.Name ??= fileName;
 
+            Console.WriteLine(_hostingEnvironment.WebRootPath); 
+
             var path = Path.Combine(_hostingEnvironment.WebRootPath, "files", file.Id.ToString("N") + fileExt);
 
             using (var fileStream = new FileStream(path, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
@@ -79,7 +80,7 @@ namespace WebApplication7.Controllers
 
             _context.Files.Add(file);
             _context.SaveChanges();
-            return RedirectToAction(nameof(Details), nameof(FoldersController), new { id });
+            return RedirectToAction(nameof(Details), "Folders", new { id });
         }
 
 
@@ -98,7 +99,7 @@ namespace WebApplication7.Controllers
             var file = _context.Files.SingleOrDefault(e => e.Id == id);
             file.Name = model.Name;
             _context.SaveChanges();
-            return RedirectToAction(nameof(Details), nameof(FilesController), new { id });
+            return RedirectToAction(nameof(Details), "Files", new { id });
         }
 
         public async Task<IActionResult> Delete(Guid? id)
@@ -120,7 +121,7 @@ namespace WebApplication7.Controllers
             var file = await _context.Files.Include(e => e.Folder).SingleOrDefaultAsync(m => m.Id == id);
             _context.Files.Remove(file);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), nameof(FoldersController), new { id = file.FolderId });
+            return RedirectToAction(nameof(Details), "Folders", new { id = file.FolderId });
         }
 
         public IActionResult Download(Guid id)
