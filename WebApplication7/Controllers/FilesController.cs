@@ -105,20 +105,8 @@ namespace WebApplication7.Controllers
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null) return NotFound();
-
-            var file = await _context.Files
-                .Include(f => f.Folder)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var file = await _context.Files.Include(f => f.Folder).SingleOrDefaultAsync(m => m.Id == id);
             if (file == null) return NotFound();
-
-            return View(file);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var file = await _context.Files.Include(e => e.Folder).SingleOrDefaultAsync(m => m.Id == id);
             _context.Files.Remove(file);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), "Folders", new { id = file.FolderId });
@@ -132,13 +120,10 @@ namespace WebApplication7.Controllers
 
             var filesPath = Path.Combine(_hostingEnvironment.WebRootPath, "files",
                 file.Id.ToString("N") + file.Extension);
-            return PhysicalFile(filesPath, GetContentType(file.Extension), file.Name + file.Extension);
-        }
 
-        public string GetContentType(string extension)
-        {
             var provider = new FileExtensionContentTypeProvider();
-            return provider.TryGetContentType($"file.{extension}", out var result) ? result : "application/unknown";
+            string typeFile = provider.TryGetContentType($"file.{file.Extension}", out var result) ? result : "application/unknown";
+            return PhysicalFile(filesPath, typeFile, file.Name + file.Extension);
         }
     }
 }
