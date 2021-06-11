@@ -16,6 +16,9 @@ namespace WebApplication7.Data
 
         public DbSet<File> Files { get; set; }
 
+        public DbSet<TopicModel> Topics { get; set; }
+        public DbSet<TopicCreatorModel> topicCreatorModels { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

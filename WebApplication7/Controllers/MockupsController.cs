@@ -27,14 +27,5 @@ namespace WebApplication7.Controllers
             return View(await _context.ForumCategories.ToListAsync());
         }
 
-        public IActionResult SingleForum()
-        {
-            return View();
-        }
-
-        public IActionResult SingleTopic()
-        {
-            return View();
-        }
     }
 }

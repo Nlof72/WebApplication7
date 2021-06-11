@@ -1,0 +1,30 @@
+﻿@model IEnumerable<WebApplication7.Models.TopicCreatorModel>
+
+<h2>Forum 1</h2>
+<p>First forum description</p>
+
+<p>
+    <a asp-action="Create">Create new topic</a>
+</p>
+
+
+<table class="table table-striped">
+    <tbody>
+        @foreach (var item in Model.OrderBy(x => x.Id))
+        {
+<tr>
+    <td>
+        <a asp-controller="SingleTopic" asp-action="SingleTopics" style="font-size: 1.3em">@Html.DisplayFor(modelItem => item.Title)</a><br />
+        @Html.DisplayFor(modelItem => item.Author),
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td style="width: 100px">
+        @ViewBag.ReplCount replies
+    </td>
+    <td style="width: 220px">
+        @Html.DisplayFor(modelItem => item.Author)<br />
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+</tr>}
+    </tbody>
+</table>
